@@ -69,8 +69,6 @@ GitHub truncates the recursive tree endpoint for very large repositories. That f
    pnpm install
    ```
 
-   This will automatically install Git hooks for version management. See [Git Hooks](#git-hooks) section for details.
-
 1. Create `apps/web/.env` with the variables listed below.
 
 1. Start the development server:
@@ -112,28 +110,18 @@ pnpm lint:fix
 pnpm typecheck
 ```
 
-## Git Hooks
+## Releases
 
-The project includes automated Git hooks for version management:
-
-### Available Hooks
-
-- **pre-commit**: Automatically increments the patch version (e.g., 1.0.0 → 1.0.1) when committing non-markdown files
-- **post-merge**: Automatically increments the minor version (e.g., 1.0.5 → 1.1.0) when merging `develop` into `master`
-
-### Installation
-
-Hooks are automatically installed when you run `pnpm install`. To manually install or reinstall:
+Work happens on `develop`; `master` holds releases. Releases are done with [synkro](https://github.com/equero/synkro):
 
 ```bash
-pnpm hooks:install
+synkro status            # what the next release would contain
+synkro sync              # merge develop into master, bump minor, tag, push
+synkro sync --patch      # patch bump (--major for major)
+synkro sync --dry-run    # show what would happen, change nothing
 ```
 
-To uninstall hooks:
-
-```bash
-pnpm hooks:uninstall
-```
+Each release is a single merge commit on `master` that also carries the new version, tagged `vX.Y.Z` with a changelog. `develop` is fast-forwarded to it afterwards.
 
 ## Project Structure
 
@@ -149,7 +137,6 @@ pnpm hooks:uninstall
 ├── packages/
 │   ├── db/              # Drizzle schema and database client
 │   └── shared/          # Constants, types and formatters shared by both sides
-├── scripts/             # Hook installers and the master sync script
 └── turbo.json           # Turborepo pipeline
 ```
 
