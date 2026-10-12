@@ -268,8 +268,7 @@ export default defineEventHandler(async (event) => {
         if (row.pushedAt) {
           try {
             const info = await loadRepoInfo()
-            unchanged =
-              new Date(info.pushed_at).getTime() === new Date(row.pushedAt).getTime()
+            unchanged = new Date(info.pushed_at).getTime() === new Date(row.pushedAt).getTime()
           } catch (err) {
             logger.evolution.warn(`pushed_at check failed for ${cacheKey}`, err)
           }

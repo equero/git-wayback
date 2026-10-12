@@ -193,9 +193,10 @@ function spawnPoint(
     }
   }
   // The root's children spread all round; deeper ones keep heading outwards.
-  const angle = parent.depth === 0
-    ? Math.random() * Math.PI * 2
-    : Math.atan2(py - centerY, px - centerX) + (Math.random() - 0.5) * SPAWN_FAN
+  const angle =
+    parent.depth === 0
+      ? Math.random() * Math.PI * 2
+      : Math.atan2(py - centerY, px - centerX) + (Math.random() - 0.5) * SPAWN_FAN
   const dist = restLength(depth, r) * (0.8 + Math.random() * 0.4)
   return { x: px + Math.cos(angle) * dist, y: py + Math.sin(angle) * dist }
 }
@@ -231,7 +232,12 @@ export function buildGraph(opts: BuildGraphOptions): Graph {
       const parent = parentKey ? nodeByKey.get(parentKey) : null
       const parentIsFresh = parentKey ? freshKeys.has(parentKey) : false
       const { x, y } = spawnPoint(
-        parent ?? null, parentIsFresh, depth, nodeRadius(data, depth), centerX, centerY,
+        parent ?? null,
+        parentIsFresh,
+        depth,
+        nodeRadius(data, depth),
+        centerX,
+        centerY,
       )
       node = {
         key,
