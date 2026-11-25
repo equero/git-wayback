@@ -136,12 +136,14 @@
 
     <!-- Visualization -->
     <template v-else>
+      <!-- Expanded, the same nodes move into a modal <dialog> (Teleport moves
+           them, it does not remount), so the canvas and its state survive. -->
+      <Teleport to="#repo-diagram-dialog" :disabled="!expanded" defer>
       <div
         class="border border-[rgb(var(--border))] overflow-hidden"
         :class="expanded
-          ? 'fixed inset-x-0 bottom-0 z-40 flex flex-col rounded-none bg-[rgb(var(--bg))]'
+          ? 'flex-1 min-h-0 flex flex-col rounded-none bg-[rgb(var(--bg))]'
           : 'rounded'"
-        :style="expanded ? { top: headerOffset + 'px' } : undefined"
       >
         <!-- Header -->
         <div class="px-4 py-3 border-b border-[rgb(var(--border))] flex items-center justify-between relative z-10">
@@ -256,7 +258,7 @@
               @pointerdown.stop
               @click.stop
             >
-              <pre class="flex-1 text-[11px] text-[rgb(var(--muted))] whitespace-pre-wrap font-mono leading-relaxed max-h-full overflow-y-auto">{{ currentSnapshot.message.trim() }}</pre>
+              <pre class="flex-1 text-[11px] text-[rgb(var(--muted))] whitespace-pre-wrap font-mono leading-relaxed max-h-full overflow-y-auto overscroll-contain">{{ currentSnapshot.message.trim() }}</pre>
               <button
                 @click.stop="messageExpanded = false"
                 aria-label="Collapse message"
@@ -485,6 +487,19 @@
           </Transition>
         </div>
       </div>
+      </Teleport>
+
+      <!-- showModal() gives the top layer, Esc, an inert page and focus
+           containment. It starts below the sticky header, which stays visible
+           (collapsed) behind a transparent backdrop. -->
+      <dialog
+        id="repo-diagram-dialog"
+        ref="expandDialog"
+        aria-label="Repository evolution, expanded"
+        class="m-0 p-0 border-0 w-full max-w-none h-auto max-h-none bottom-0 open:flex flex-col bg-[rgb(var(--bg))] text-[rgb(var(--foreground))] backdrop:bg-transparent"
+        :style="{ top: headerOffset + 'px' }"
+        @close="onDialogClose"
+      />
     </template>
   </div>
 </template>
@@ -554,6 +569,10 @@ const hiddenExtensions = ref<Set<string>>(new Set())
 const hoveredIndex = ref<number | null>(null)
 const messageExpanded = ref(false)
 const expanded = ref(false)
+const expandDialog = ref<HTMLDialogElement | null>(null)
+// Where focus and the page were before expanding, to restore after collapsing.
+let expandOpener: HTMLElement | null = null
+let expandScrollY = 0
 const showExpandHint = ref(false)
 const headerCollapsed = useHeaderCollapsed()
 const headerOffset = ref(56)
@@ -762,10 +781,40 @@ function reconfigure() {
 }
 
 function toggleExpand() {
-  expanded.value = !expanded.value
+  const dialog = expandDialog.value
+  if (!dialog) return
+  // Collapsing goes through the dialog's close event, the same path as Esc.
+  if (expanded.value) {
+    dialog.close()
+    return
+  }
+  expandOpener = document.activeElement instanceof HTMLElement ? document.activeElement : null
+  expandScrollY = window.scrollY
+  dialog.showModal()
+  expanded.value = true
   markExpandHintSeen()
   // ResizeObserver also fires, but call directly so it snaps without the debounce delay.
   nextTick(() => resize())
+}
+
+function onDialogClose() {
+  expanded.value = false
+  nextTick(() => {
+    resize()
+    // overscroll-behavior does not stop a wheel over the toolbar or timeline
+    // from scrolling the inert page underneath (Chrome 158, non-scrolling
+    // dialog), so put the page back where it was.
+    window.scrollTo({ top: expandScrollY, behavior: 'instant' })
+    // The browser returns focus to the opener on close, but the opener sat
+    // inside the dialog until the Teleport moved it back, so focus is left on
+    // the closed dialog (later <body>). Finish the job once it is back.
+    const active = document.activeElement
+    const lost = !active || active === document.body || !!expandDialog.value?.contains(active)
+    if (lost && expandOpener?.isConnected) {
+      expandOpener.focus({ preventScroll: true })
+    }
+    expandOpener = null
+  })
 }
 
 const canvasReady = computed(() => started.value && !loading.value && !error.value && snapshots.value.length > 0)
@@ -776,11 +825,6 @@ function isTypingTarget(el: EventTarget | null) {
 }
 
 function onKeydown(e: KeyboardEvent) {
-  if (e.key === 'Escape' && expanded.value) {
-    expanded.value = false
-    nextTick(() => resize())
-    return
-  }
   if (
     (e.key === 'f' || e.key === 'F')
     && !e.repeat && !e.ctrlKey && !e.metaKey && !e.altKey
@@ -818,9 +862,6 @@ watch(
 watch(expanded, (v) => {
   // Expanded is meant to hand the graph every pixel, so the header collapses too.
   headerCollapsed.value = v
-  if (typeof document !== 'undefined') {
-    document.body.style.overflow = v ? 'hidden' : ''
-  }
 })
 
 function toggleExtension(ext: string) {
@@ -889,9 +930,20 @@ onUnmounted(() => {
   if (redrawFrame !== null) cancelAnimationFrame(redrawFrame)
   if (expandHintTimer) clearTimeout(expandHintTimer)
   window.removeEventListener('keydown', onKeydown)
-  if (typeof document !== 'undefined') document.body.style.overflow = ''
   stopPlay()
   destroyRenderer()
 })
 </script>
 
+<style scoped>
+/* Without both rules, scrolling inside the dialog or over its backdrop
+   scrolls the page behind it. Progressive enhancement: where unsupported,
+   showModal() still makes the page inert. */
+#repo-diagram-dialog:modal {
+  overscroll-behavior: contain;
+}
+#repo-diagram-dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+</style>

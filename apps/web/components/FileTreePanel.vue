@@ -1,7 +1,7 @@
 <template>
   <div
     ref="scroller"
-    class="overflow-y-auto overflow-x-hidden"
+    class="overflow-y-auto overflow-x-hidden overscroll-contain"
     @scroll.passive="onScroll"
   >
     <div :style="{ height: `${rows.length * ROW_H}px`, position: 'relative' }">
