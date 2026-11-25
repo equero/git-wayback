@@ -12,9 +12,9 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@equerodev/parley": "^0.2.5",
     "@git-wayback/db": "workspace:*",
     "@git-wayback/shared": "workspace:*",
-    "@hbeneke/parley": "^0.2.3",
     "@nuxtjs/tailwindcss": "^6.14.0",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.37.0",

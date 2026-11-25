@@ -20,15 +20,15 @@ importers:
 
   apps/web:
     dependencies:
+      '@equerodev/parley':
+        specifier: ^0.2.5
+        version: 0.2.5
       '@git-wayback/db':
         specifier: workspace:*
         version: link:../../packages/db
       '@git-wayback/shared':
         specifier: workspace:*
         version: link:../../packages/shared
-      '@hbeneke/parley':
-        specifier: ^0.2.3
-        version: 0.2.3
       '@nuxtjs/tailwindcss':
         specifier: ^6.14.0
         version: 6.14.0(magicast@0.5.1)(tsx@4.21.0)(yaml@2.8.2)
@@ -328,6 +328,9 @@ packages:
 
   '@emnapi/wasi-threads@1.1.0':
     resolution: {integrity: sha512-WI0DdZ8xFSbgMjR1sFsKABJ/C5OnRrjT06JXbZKexJGrDuPTzZdDYfFlsgcCXCyf+suG5QU2e/y1Wo2V/OapLQ==}
+
+  '@equerodev/parley@0.2.5':
+    resolution: {integrity: sha512-vmctqybPQLxt19RS/d4fdSbwwtI6w9cpJJELUwvIP4Br63irOvJgWLI5POrw3uBbyIhzltJLRBAYfpUHlW7obA==}
 
   '@esbuild-kit/core-utils@3.3.2':
     resolution: {integrity: sha512-sPRAnw9CdSsRmEtnsl2WXWdyquogVpB3yZ3dgwJfe8zrOzTsV7cJvmwrKVa+0ma5BoiGJ+BoqkMvawbayKUsqQ==}
@@ -904,9 +907,6 @@ packages:
   '@fastify/busboy@2.1.1':
     resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
     engines: {node: '>=14'}
-
-  '@hbeneke/parley@0.2.3':
-    resolution: {integrity: sha512-PucYyqrbmxjxwUMZ6xwTYk06cSA/DSOtydMiBjIZDDsA4PjPm7yLr1st1+tHOaFPbgYVvQ/eVgcuwgY3eVYukQ==}
 
   '@ioredis/commands@1.5.0':
     resolution: {integrity: sha512-eUgLqrMf8nJkZxT24JvVRrQya1vZkQh8BBeYNwGDqa5I0VUi8ACx7uFvAaLxintokpTenkK6DASvo/bvNbBGow==}
@@ -5171,6 +5171,8 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
+  '@equerodev/parley@0.2.5': {}
+
   '@esbuild-kit/core-utils@3.3.2':
     dependencies:
       esbuild: 0.18.20
@@ -5465,8 +5467,6 @@ snapshots:
 
   '@fastify/busboy@2.1.1':
     optional: true
-
-  '@hbeneke/parley@0.2.3': {}
 
   '@ioredis/commands@1.5.0': {}
 
