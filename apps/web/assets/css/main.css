@@ -16,6 +16,12 @@
 }
 
 @layer base {
+  /* The sticky header is ~43px once collapsed (it always is after a scroll),
+     so focus and anchor jumps land below it instead of under it. */
+  html {
+    scroll-padding-top: 3.5rem;
+  }
+
   body {
     font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
     background-color: rgb(var(--bg));
