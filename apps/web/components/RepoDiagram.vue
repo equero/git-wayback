@@ -411,7 +411,7 @@
 
               <div class="flex-1 relative">
                 <!-- Segmented timeline -->
-                <div class="flex h-6 items-end gap-px">
+                <div class="flex h-6 [@media(pointer:coarse)]:h-11 items-end gap-px">
                   <button
                     v-for="(snap, i) in snapshots"
                     :key="snap.tag"
@@ -423,10 +423,14 @@
                     @mouseleave="hoveredIndex = null"
                     @focus="hoveredIndex = i"
                     @blur="hoveredIndex = null"
-                    class="flex-1 rounded-sm transition-all duration-150 cursor-pointer"
-                    :class="i <= currentIndex ? 'bg-primary' : 'bg-[rgb(var(--border))]'"
-                    :style="{ height: i === currentIndex ? '100%' : i === hoveredIndex ? '80%' : '40%' }"
-                  />
+                    class="flex-1 h-full flex items-end cursor-pointer"
+                  >
+                    <span
+                      class="w-full rounded-sm transition-[height,background-color] duration-150"
+                      :class="i <= currentIndex ? 'bg-primary' : 'bg-[rgb(var(--border))]'"
+                      :style="{ height: i === currentIndex ? '100%' : i === hoveredIndex ? '80%' : '40%' }"
+                    />
+                  </button>
                 </div>
                 <!-- Hover tooltip -->
                 <div
