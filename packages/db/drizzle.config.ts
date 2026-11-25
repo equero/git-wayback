@@ -4,7 +4,7 @@ import { defineConfig } from 'drizzle-kit'
 
 // Load .env.local from monorepo root
 const rootDir = path.resolve(__dirname, '../..')
-config({ path: path.join(rootDir, '.env.local') })
+config({ path: path.join(rootDir, '.env.local'), quiet: true })
 
 export default defineConfig({
   schema: './src/schema/index.ts',
