@@ -16,6 +16,7 @@
             : 'hover:bg-[rgb(var(--border)/0.4)]'"
           :style="{ height: `${ROW_H}px`, paddingLeft: `${row.depth * 10 + 6}px` }"
           :data-path="row.key"
+          :aria-expanded="row.node.type === 'folder' ? row.open : undefined"
           @mouseenter="$emit('hover', row.key)"
           @mouseleave="$emit('hover', null)"
           @click.stop="onClick(row)"
@@ -25,7 +26,7 @@
             class="w-[10px] h-[10px] inline-flex items-center justify-center text-[rgb(var(--muted))] transition-transform duration-[120ms] shrink-0"
             :class="row.open ? 'rotate-90' : ''"
           >
-            <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor">
+            <svg aria-hidden="true" width="8" height="8" viewBox="0 0 8 8" fill="currentColor">
               <path d="M2 1l4 3-4 3z" />
             </svg>
           </span>

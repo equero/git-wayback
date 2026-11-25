@@ -12,6 +12,8 @@
         </NuxtLink>
         <span class="text-[10px] text-[rgb(var(--muted))]">{{ formatRelativeDate(repo.visitedAt) }}</span>
         <button
+          type="button"
+          :aria-label="`Remove ${repo.fullName} from recent`"
           @click="removeEntry(repo.fullName)"
           class="text-[10px] text-[rgb(var(--muted))] hover:text-[rgb(var(--foreground))] transition-colors"
           title="Remove"

@@ -179,10 +179,10 @@
               :title="expanded ? 'Collapse (F / Esc)' : 'Expand (F)'"
               @click="toggleExpand"
             >
-              <svg v-if="!expanded" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <svg aria-hidden="true" v-if="!expanded" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M7 1h4v4 M11 1 7 5 M5 11H1V7 M1 11l4-4" />
               </svg>
-              <svg v-else width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <svg aria-hidden="true" v-else width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M11 1 7 5m0 0V1m0 4h4 M1 11l4-4m0 0v4m0-4H1" />
               </svg>
             </button>
@@ -204,7 +204,7 @@
               class="shrink-0 inline-flex items-center justify-center px-1.5 h-5 rounded border text-[rgb(var(--muted))] hover:text-primary transition-colors"
               :class="messageExpanded ? 'border-primary text-primary' : 'border-[rgb(var(--border))] hover:border-primary'"
             >
-              <svg width="14" height="4" viewBox="0 0 14 4" fill="currentColor">
+              <svg aria-hidden="true" width="14" height="4" viewBox="0 0 14 4" fill="currentColor">
                 <circle cx="2" cy="2" r="1.2" />
                 <circle cx="7" cy="2" r="1.2" />
                 <circle cx="12" cy="2" r="1.2" />
@@ -263,7 +263,7 @@
                 title="Collapse"
                 class="shrink-0 w-5 h-5 rounded flex items-center justify-center text-[rgb(var(--muted))] hover:text-primary hover:bg-[rgb(var(--border))] transition-colors"
               >
-                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
                   <path d="M1 5h8" />
                 </svg>
               </button>
@@ -284,7 +284,7 @@
                   :title="filesPanelOpen ? 'Collapse' : 'Expand'"
                   @click="filesPanelOpen = !filesPanelOpen"
                 >
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                  <svg aria-hidden="true" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
                     <path v-if="filesPanelOpen" d="M1 5h8" />
                     <path v-else d="M1 5h8 M5 1v8" />
                   </svg>
@@ -314,7 +314,7 @@
                   :title="legendPanelOpen ? 'Collapse' : 'Expand'"
                   @click="legendPanelOpen = !legendPanelOpen"
                 >
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                  <svg aria-hidden="true" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
                     <path v-if="legendPanelOpen" d="M1 5h8" />
                     <path v-else d="M1 5h8 M5 1v8" />
                   </svg>
@@ -398,6 +398,8 @@
           >
             <div class="flex items-center gap-3">
               <button
+                type="button"
+                :aria-label="isPlaying ? 'Pause' : 'Play'"
                 @click="onTogglePlay"
                 class="w-7 h-7 rounded flex items-center justify-center text-xs transition-colors border"
                 :class="isPlaying
@@ -413,9 +415,14 @@
                   <button
                     v-for="(snap, i) in snapshots"
                     :key="snap.tag"
+                    type="button"
+                    :aria-label="`Go to ${snap.tag}`"
+                    :aria-current="i === currentIndex ? 'step' : undefined"
                     @click="seekTo(i)"
                     @mouseenter="hoveredIndex = i"
                     @mouseleave="hoveredIndex = null"
+                    @focus="hoveredIndex = i"
+                    @blur="hoveredIndex = null"
                     class="flex-1 rounded-sm transition-all duration-150 cursor-pointer"
                     :class="i <= currentIndex ? 'bg-primary' : 'bg-[rgb(var(--border))]'"
                     :style="{ height: i === currentIndex ? '100%' : i === hoveredIndex ? '80%' : '40%' }"
