@@ -188,7 +188,7 @@ function collapseNode(node: TreeNode, perFolder: number, keepExpanded: Set<strin
   }
 
   // Biggest files first: they carry the most signal about what a folder holds.
-  const sorted = [...files].sort((a, b) => (b.size || 0) - (a.size || 0))
+  const sorted = files.toSorted((a, b) => (b.size || 0) - (a.size || 0))
   const hidden = files.length - perFolder
 
   return {
