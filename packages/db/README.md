@@ -37,8 +37,9 @@ A fresh database can run `pnpm db:migrate` from empty with no special steps.
 ### `drizzle/manual/`
 
 Reviewed DDL applied by hand while the history was drifted. They are superseded
-by the baseline and are kept as a record of what was run. `0003` is the only one
-still worth applying, and only to databases created before the rebaseline.
+by the baseline and are kept as a record of what was run. `0003` is still worth
+applying, but only to databases created before the rebaseline. `0005` adds the
+`pushed_at` column that the baseline is missing: apply it to every database.
 
 ## Commands
 
