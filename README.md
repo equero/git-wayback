@@ -81,12 +81,12 @@ GitHub truncates the recursive tree endpoint for very large repositories. That f
 
 ### Environment Variables
 
-| Variable | Required | Purpose |
-| --- | --- | --- |
-| `DATABASE_URL` | yes | PostgreSQL connection string |
-| `GITHUB_TOKEN` | recommended | Raises the GitHub API budget from 60 to 5000 requests/hour |
-| `UPSTASH_REDIS_REST_URL` | production | Rate limiter backend |
-| `UPSTASH_REDIS_REST_TOKEN` | production | Rate limiter backend |
+| Variable                   | Required    | Purpose                                                    |
+| -------------------------- | ----------- | ---------------------------------------------------------- |
+| `DATABASE_URL`             | yes         | PostgreSQL connection string                               |
+| `GITHUB_TOKEN`             | recommended | Raises the GitHub API budget from 60 to 5000 requests/hour |
+| `UPSTASH_REDIS_REST_URL`   | production  | Rate limiter backend                                       |
+| `UPSTASH_REDIS_REST_TOKEN` | production  | Rate limiter backend                                       |
 
 Without Upstash configured the application still runs in development. In production the GitHub-backed endpoints fail closed if the limiter is unreachable: an unavailable limiter is indistinguishable from one being drained deliberately.
 

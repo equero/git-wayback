@@ -16,7 +16,7 @@ Write new changes as generated migrations rather than by hand.
 
 ### Existing databases
 
-The baseline is *already applied* on any database provisioned before the
+The baseline is _already applied_ on any database provisioned before the
 rebaseline — running it would fail on `CREATE TABLE`. Mark it as applied
 instead of executing it:
 
@@ -42,9 +42,9 @@ still worth applying, and only to databases created before the rebaseline.
 
 ## Commands
 
-| Command | What it does |
-| --- | --- |
-| `pnpm db:generate` | Emit a migration from `src/schema` changes |
-| `pnpm db:migrate` | Apply pending migrations |
-| `pnpm db:push` | Push the schema straight to the database (no migration file) |
-| `pnpm db:studio` | Open Drizzle Studio |
+| Command            | What it does                                                 |
+| ------------------ | ------------------------------------------------------------ |
+| `pnpm db:generate` | Emit a migration from `src/schema` changes                   |
+| `pnpm db:migrate`  | Apply pending migrations                                     |
+| `pnpm db:push`     | Push the schema straight to the database (no migration file) |
+| `pnpm db:studio`   | Open Drizzle Studio                                          |
