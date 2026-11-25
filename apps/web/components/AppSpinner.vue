@@ -1,6 +1,6 @@
 <template>
   <div
-    class="inline-block rounded-full border-[rgb(var(--border))] border-t-primary animate-spin"
+    class="inline-block rounded-full border-[rgb(var(--border))] border-t-primary animate-spin motion-reduce:[animation-duration:3s]"
     :class="SIZES[size]"
     role="status"
     :aria-label="label"

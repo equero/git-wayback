@@ -231,8 +231,8 @@
 
             <!-- First-run hint pointing at fullscreen -->
             <Transition
-              enter-active-class="transition-all duration-300 ease-out"
-              enter-from-class="opacity-0 -translate-y-1"
+              enter-active-class="transition-[opacity,transform] duration-300 ease-out"
+              enter-from-class="opacity-0 motion-safe:-translate-y-1"
               leave-active-class="transition-opacity duration-300"
               leave-to-class="opacity-0"
             >
@@ -463,7 +463,7 @@
                It dissolves on play rather than cutting, so the graph is revealed. -->
           <Transition
             leave-active-class="transition-all duration-500 ease-out"
-            leave-to-class="opacity-0 backdrop-blur-none [&>button]:scale-[2.4] [&>button]:opacity-0"
+            leave-to-class="opacity-0 backdrop-blur-none motion-safe:[&>button]:scale-[2.4] [&>button]:opacity-0"
           >
             <div
               v-if="showCenterPlay"
@@ -474,7 +474,7 @@
                 type="button"
                 aria-label="Play evolution"
                 title="Play evolution"
-                class="w-16 h-16 rounded-full flex items-center justify-center border border-primary text-primary bg-bg/70 backdrop-blur transition-all duration-300 ease-out hover:scale-110 hover:bg-primary hover:text-[rgb(var(--bg))]"
+                class="w-16 h-16 rounded-full flex items-center justify-center border border-primary text-primary bg-bg/70 backdrop-blur transition-[transform,opacity,background-color,color] duration-300 ease-out motion-safe:hover:scale-110 hover:bg-primary hover:text-[rgb(var(--bg))]"
                 @click.stop="startPlayback"
               >
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
