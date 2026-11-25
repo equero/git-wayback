@@ -88,7 +88,7 @@ const sortCache = new WeakMap<TreeNode[], TreeNode[]>()
 function sorted(children: TreeNode[]): TreeNode[] {
   let out = sortCache.get(children)
   if (!out) {
-    out = [...children].sort((a, b) => {
+    out = children.toSorted((a, b) => {
       if (a.type !== b.type) return a.type === 'folder' ? -1 : 1
       return a.name.localeCompare(b.name)
     })
