@@ -2,12 +2,13 @@
   <div ref="containerRef" class="relative flex-1 max-w-md ml-auto">
     <input
       v-model="query"
-      type="text"
+      type="search"
       placeholder="Search repositories..."
       aria-label="Search repositories"
       class="w-full px-3 py-1.5 text-xs bg-transparent border border-[rgb(var(--border))] rounded outline-none transition-colors focus:border-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary placeholder:text-[rgb(var(--muted))]"
       @input="onInput"
       @focus="isOpen = true"
+      @keydown.esc="isOpen = false"
     />
     <AppSpinner
       v-if="isLoading"

@@ -5,14 +5,17 @@ import { siteConfig } from "~/site.config";
 <template>
   <ClientOnly>
     <site-footer
-      :nickname="siteConfig.nickname"
+      :name="siteConfig.authorName"
+      :href="siteConfig.authorUrl"
       :year="siteConfig.copyrightYear"
-      copyright="bugs"
+      copyright="Copyright© {year}. All bugs reserved."
+      reveal="hover"
       :style="{
         '--link': 'rgb(var(--primary))',
         '--link-hover': 'rgb(var(--primary-hovered))',
-        '--accent': 'rgb(var(--secondary))',
       }"
-    />
+    >
+      <span slot="tagline">Made with <span class="text-secondary">❤️</span> from Spain.</span>
+    </site-footer>
   </ClientOnly>
 </template>

@@ -2,7 +2,7 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-000000?logo=vercel&logoColor=white)](https://git-wayback.dev)
-[![Version](https://img.shields.io/badge/version-0.7.41-green.svg)](https://github.com/hbeneke/git-wayback)
+[![Version](https://img.shields.io/github/package-json/v/equero/git-wayback/master)](https://github.com/equero/git-wayback)
 
 A web application that renders the evolution of a GitHub repository as an animated file tree, built with Nuxt and D3.
 
@@ -59,7 +59,7 @@ GitHub truncates the recursive tree endpoint for very large repositories. That f
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/hbeneke/git-wayback.git
+   git clone https://github.com/equero/git-wayback.git
    cd git-wayback
    ```
 
@@ -81,12 +81,12 @@ GitHub truncates the recursive tree endpoint for very large repositories. That f
 
 ### Environment Variables
 
-| Variable | Required | Purpose |
-| --- | --- | --- |
-| `DATABASE_URL` | yes | PostgreSQL connection string |
-| `GITHUB_TOKEN` | recommended | Raises the GitHub API budget from 60 to 5000 requests/hour |
-| `UPSTASH_REDIS_REST_URL` | production | Rate limiter backend |
-| `UPSTASH_REDIS_REST_TOKEN` | production | Rate limiter backend |
+| Variable                   | Required    | Purpose                                                    |
+| -------------------------- | ----------- | ---------------------------------------------------------- |
+| `DATABASE_URL`             | yes         | PostgreSQL connection string                               |
+| `GITHUB_TOKEN`             | recommended | Raises the GitHub API budget from 60 to 5000 requests/hour |
+| `UPSTASH_REDIS_REST_URL`   | production  | Rate limiter backend                                       |
+| `UPSTASH_REDIS_REST_TOKEN` | production  | Rate limiter backend                                       |
 
 Without Upstash configured the application still runs in development. In production the GitHub-backed endpoints fail closed if the limiter is unreachable: an unavailable limiter is indistinguishable from one being drained deliberately.
 
@@ -199,7 +199,7 @@ Under the conditions that:
 
 ## Author
 
-Enrique Quero (Habakuk Beneke) — [@hbeneke](https://github.com/hbeneke)
+Enrique Quero — [@equero](https://github.com/equero)
 
 ## Acknowledgments
 

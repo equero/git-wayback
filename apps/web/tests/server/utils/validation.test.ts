@@ -9,7 +9,7 @@ import {
 describe('isValidGitHubOwner', () => {
   it('accepts typical usernames and orgs', () => {
     expect(isValidGitHubOwner('vercel')).toBe(true)
-    expect(isValidGitHubOwner('hbeneke')).toBe(true)
+    expect(isValidGitHubOwner('equero')).toBe(true)
     expect(isValidGitHubOwner('Nuxt-Js')).toBe(true)
     expect(isValidGitHubOwner('a')).toBe(true)
   })
@@ -95,8 +95,8 @@ describe('splitRepoFullName', () => {
       owner: 'vercel',
       repo: 'next.js',
     })
-    expect(splitRepoFullName('  hbeneke/git-wayback  ')).toEqual({
-      owner: 'hbeneke',
+    expect(splitRepoFullName('  equero/git-wayback  ')).toEqual({
+      owner: 'equero',
       repo: 'git-wayback',
     })
   })

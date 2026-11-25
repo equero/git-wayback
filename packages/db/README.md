@@ -16,7 +16,7 @@ Write new changes as generated migrations rather than by hand.
 
 ### Existing databases
 
-The baseline is *already applied* on any database provisioned before the
+The baseline is _already applied_ on any database provisioned before the
 rebaseline — running it would fail on `CREATE TABLE`. Mark it as applied
 instead of executing it:
 
@@ -37,14 +37,15 @@ A fresh database can run `pnpm db:migrate` from empty with no special steps.
 ### `drizzle/manual/`
 
 Reviewed DDL applied by hand while the history was drifted. They are superseded
-by the baseline and are kept as a record of what was run. `0003` is the only one
-still worth applying, and only to databases created before the rebaseline.
+by the baseline and are kept as a record of what was run. `0003` is still worth
+applying, but only to databases created before the rebaseline. `0005` adds the
+`pushed_at` column that the baseline is missing: apply it to every database.
 
 ## Commands
 
-| Command | What it does |
-| --- | --- |
-| `pnpm db:generate` | Emit a migration from `src/schema` changes |
-| `pnpm db:migrate` | Apply pending migrations |
-| `pnpm db:push` | Push the schema straight to the database (no migration file) |
-| `pnpm db:studio` | Open Drizzle Studio |
+| Command            | What it does                                                 |
+| ------------------ | ------------------------------------------------------------ |
+| `pnpm db:generate` | Emit a migration from `src/schema` changes                   |
+| `pnpm db:migrate`  | Apply pending migrations                                     |
+| `pnpm db:push`     | Push the schema straight to the database (no migration file) |
+| `pnpm db:studio`   | Open Drizzle Studio                                          |

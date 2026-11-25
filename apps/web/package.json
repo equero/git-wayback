@@ -12,23 +12,23 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@equerodev/parley": "^0.2.5",
     "@git-wayback/db": "workspace:*",
     "@git-wayback/shared": "workspace:*",
-    "@hbeneke/parley": "^0.2.3",
     "@nuxtjs/tailwindcss": "^6.14.0",
-    "@upstash/ratelimit": "^2.0.8",
-    "@upstash/redis": "^1.37.0",
+    "@upstash/ratelimit": "^2.2.2",
+    "@upstash/redis": "^1.41.1",
     "@vercel/analytics": "^2.0.1",
-    "@vercel/speed-insights": "^2.0.0",
-    "d3": "^7.9.0",
-    "drizzle-orm": "^0.38.3",
-    "nuxt": "^3.15.1",
-    "vue": "^3.5.13"
+    "@vercel/speed-insights": "^2.1.0",
+    "d3": "^7.9.2",
+    "drizzle-orm": "^0.45.4",
+    "nuxt": "^4.7.0",
+    "vue": "^3.5.46"
   },
   "devDependencies": {
     "@types/d3": "^7.4.3",
     "typescript": "^5.7.2",
-    "vitest": "^2.1.8",
-    "vue-tsc": "^3.3.8"
+    "vitest": "^5.1.2",
+    "vue-tsc": "^3.3.14"
   }
 }

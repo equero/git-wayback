@@ -136,12 +136,14 @@
 
     <!-- Visualization -->
     <template v-else>
+      <!-- Expanded, the same nodes move into a modal <dialog> (Teleport moves
+           them, it does not remount), so the canvas and its state survive. -->
+      <Teleport to="#repo-diagram-dialog" :disabled="!expanded" defer>
       <div
         class="border border-[rgb(var(--border))] overflow-hidden"
         :class="expanded
-          ? 'fixed inset-x-0 bottom-0 z-40 flex flex-col rounded-none bg-[rgb(var(--bg))]'
+          ? 'flex-1 min-h-0 flex flex-col rounded-none bg-[rgb(var(--bg))]'
           : 'rounded'"
-        :style="expanded ? { top: headerOffset + 'px' } : undefined"
       >
         <!-- Header -->
         <div class="px-4 py-3 border-b border-[rgb(var(--border))] flex items-center justify-between relative z-10">
@@ -179,10 +181,10 @@
               :title="expanded ? 'Collapse (F / Esc)' : 'Expand (F)'"
               @click="toggleExpand"
             >
-              <svg v-if="!expanded" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <svg aria-hidden="true" v-if="!expanded" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M7 1h4v4 M11 1 7 5 M5 11H1V7 M1 11l4-4" />
               </svg>
-              <svg v-else width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <svg aria-hidden="true" v-else width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M11 1 7 5m0 0V1m0 4h4 M1 11l4-4m0 0v4m0-4H1" />
               </svg>
             </button>
@@ -204,7 +206,7 @@
               class="shrink-0 inline-flex items-center justify-center px-1.5 h-5 rounded border text-[rgb(var(--muted))] hover:text-primary transition-colors"
               :class="messageExpanded ? 'border-primary text-primary' : 'border-[rgb(var(--border))] hover:border-primary'"
             >
-              <svg width="14" height="4" viewBox="0 0 14 4" fill="currentColor">
+              <svg aria-hidden="true" width="14" height="4" viewBox="0 0 14 4" fill="currentColor">
                 <circle cx="2" cy="2" r="1.2" />
                 <circle cx="7" cy="2" r="1.2" />
                 <circle cx="12" cy="2" r="1.2" />
@@ -231,8 +233,8 @@
 
             <!-- First-run hint pointing at fullscreen -->
             <Transition
-              enter-active-class="transition-all duration-300 ease-out"
-              enter-from-class="opacity-0 -translate-y-1"
+              enter-active-class="transition-[opacity,transform] duration-300 ease-out"
+              enter-from-class="opacity-0 motion-safe:-translate-y-1"
               leave-active-class="transition-opacity duration-300"
               leave-to-class="opacity-0"
             >
@@ -256,14 +258,14 @@
               @pointerdown.stop
               @click.stop
             >
-              <pre class="flex-1 text-[11px] text-[rgb(var(--muted))] whitespace-pre-wrap font-mono leading-relaxed max-h-full overflow-y-auto">{{ currentSnapshot.message.trim() }}</pre>
+              <pre class="flex-1 text-[11px] text-[rgb(var(--muted))] whitespace-pre-wrap font-mono leading-relaxed max-h-full overflow-y-auto overscroll-contain">{{ currentSnapshot.message.trim() }}</pre>
               <button
                 @click.stop="messageExpanded = false"
                 aria-label="Collapse message"
                 title="Collapse"
                 class="shrink-0 w-5 h-5 rounded flex items-center justify-center text-[rgb(var(--muted))] hover:text-primary hover:bg-[rgb(var(--border))] transition-colors"
               >
-                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
                   <path d="M1 5h8" />
                 </svg>
               </button>
@@ -284,7 +286,7 @@
                   :title="filesPanelOpen ? 'Collapse' : 'Expand'"
                   @click="filesPanelOpen = !filesPanelOpen"
                 >
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                  <svg aria-hidden="true" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
                     <path v-if="filesPanelOpen" d="M1 5h8" />
                     <path v-else d="M1 5h8 M5 1v8" />
                   </svg>
@@ -314,7 +316,7 @@
                   :title="legendPanelOpen ? 'Collapse' : 'Expand'"
                   @click="legendPanelOpen = !legendPanelOpen"
                 >
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                  <svg aria-hidden="true" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
                     <path v-if="legendPanelOpen" d="M1 5h8" />
                     <path v-else d="M1 5h8 M5 1v8" />
                   </svg>
@@ -398,6 +400,8 @@
           >
             <div class="flex items-center gap-3">
               <button
+                type="button"
+                :aria-label="isPlaying ? 'Pause' : 'Play'"
                 @click="onTogglePlay"
                 class="w-7 h-7 rounded flex items-center justify-center text-xs transition-colors border"
                 :class="isPlaying
@@ -409,17 +413,26 @@
 
               <div class="flex-1 relative">
                 <!-- Segmented timeline -->
-                <div class="flex h-6 items-end gap-px">
+                <div class="flex h-6 [@media(pointer:coarse)]:h-11 items-end gap-px">
                   <button
                     v-for="(snap, i) in snapshots"
                     :key="snap.tag"
+                    type="button"
+                    :aria-label="`Go to ${snap.tag}`"
+                    :aria-current="i === currentIndex ? 'step' : undefined"
                     @click="seekTo(i)"
                     @mouseenter="hoveredIndex = i"
                     @mouseleave="hoveredIndex = null"
-                    class="flex-1 rounded-sm transition-all duration-150 cursor-pointer"
-                    :class="i <= currentIndex ? 'bg-primary' : 'bg-[rgb(var(--border))]'"
-                    :style="{ height: i === currentIndex ? '100%' : i === hoveredIndex ? '80%' : '40%' }"
-                  />
+                    @focus="hoveredIndex = i"
+                    @blur="hoveredIndex = null"
+                    class="flex-1 h-full flex items-end cursor-pointer"
+                  >
+                    <span
+                      class="w-full rounded-sm transition-[height,background-color] duration-150"
+                      :class="i <= currentIndex ? 'bg-primary' : 'bg-[rgb(var(--border))]'"
+                      :style="{ height: i === currentIndex ? '100%' : i === hoveredIndex ? '80%' : '40%' }"
+                    />
+                  </button>
                 </div>
                 <!-- Hover tooltip -->
                 <div
@@ -452,7 +465,7 @@
                It dissolves on play rather than cutting, so the graph is revealed. -->
           <Transition
             leave-active-class="transition-all duration-500 ease-out"
-            leave-to-class="opacity-0 backdrop-blur-none [&>button]:scale-[2.4] [&>button]:opacity-0"
+            leave-to-class="opacity-0 backdrop-blur-none motion-safe:[&>button]:scale-[2.4] [&>button]:opacity-0"
           >
             <div
               v-if="showCenterPlay"
@@ -463,7 +476,7 @@
                 type="button"
                 aria-label="Play evolution"
                 title="Play evolution"
-                class="w-16 h-16 rounded-full flex items-center justify-center border border-primary text-primary bg-bg/70 backdrop-blur transition-all duration-300 ease-out hover:scale-110 hover:bg-primary hover:text-[rgb(var(--bg))]"
+                class="w-16 h-16 rounded-full flex items-center justify-center border border-primary text-primary bg-bg/70 backdrop-blur transition-[transform,opacity,background-color,color] duration-300 ease-out motion-safe:hover:scale-110 hover:bg-primary hover:text-[rgb(var(--bg))]"
                 @click.stop="startPlayback"
               >
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -474,6 +487,19 @@
           </Transition>
         </div>
       </div>
+      </Teleport>
+
+      <!-- showModal() gives the top layer, Esc, an inert page and focus
+           containment. It starts below the sticky header, which stays visible
+           (collapsed) behind a transparent backdrop. -->
+      <dialog
+        id="repo-diagram-dialog"
+        ref="expandDialog"
+        aria-label="Repository evolution, expanded"
+        class="m-0 p-0 border-0 w-full max-w-none h-auto max-h-none bottom-0 open:flex flex-col bg-[rgb(var(--bg))] text-[rgb(var(--foreground))] backdrop:bg-transparent"
+        :style="{ top: headerOffset + 'px' }"
+        @close="onDialogClose"
+      />
     </template>
   </div>
 </template>
@@ -543,6 +569,10 @@ const hiddenExtensions = ref<Set<string>>(new Set())
 const hoveredIndex = ref<number | null>(null)
 const messageExpanded = ref(false)
 const expanded = ref(false)
+const expandDialog = ref<HTMLDialogElement | null>(null)
+// Where focus and the page were before expanding, to restore after collapsing.
+let expandOpener: HTMLElement | null = null
+let expandScrollY = 0
 const showExpandHint = ref(false)
 const headerCollapsed = useHeaderCollapsed()
 const headerOffset = ref(56)
@@ -751,10 +781,40 @@ function reconfigure() {
 }
 
 function toggleExpand() {
-  expanded.value = !expanded.value
+  const dialog = expandDialog.value
+  if (!dialog) return
+  // Collapsing goes through the dialog's close event, the same path as Esc.
+  if (expanded.value) {
+    dialog.close()
+    return
+  }
+  expandOpener = document.activeElement instanceof HTMLElement ? document.activeElement : null
+  expandScrollY = window.scrollY
+  dialog.showModal()
+  expanded.value = true
   markExpandHintSeen()
   // ResizeObserver also fires, but call directly so it snaps without the debounce delay.
   nextTick(() => resize())
+}
+
+function onDialogClose() {
+  expanded.value = false
+  nextTick(() => {
+    resize()
+    // overscroll-behavior does not stop a wheel over the toolbar or timeline
+    // from scrolling the inert page underneath (Chrome 158, non-scrolling
+    // dialog), so put the page back where it was.
+    window.scrollTo({ top: expandScrollY, behavior: 'instant' })
+    // The browser returns focus to the opener on close, but the opener sat
+    // inside the dialog until the Teleport moved it back, so focus is left on
+    // the closed dialog (later <body>). Finish the job once it is back.
+    const active = document.activeElement
+    const lost = !active || active === document.body || !!expandDialog.value?.contains(active)
+    if (lost && expandOpener?.isConnected) {
+      expandOpener.focus({ preventScroll: true })
+    }
+    expandOpener = null
+  })
 }
 
 const canvasReady = computed(() => started.value && !loading.value && !error.value && snapshots.value.length > 0)
@@ -765,11 +825,6 @@ function isTypingTarget(el: EventTarget | null) {
 }
 
 function onKeydown(e: KeyboardEvent) {
-  if (e.key === 'Escape' && expanded.value) {
-    expanded.value = false
-    nextTick(() => resize())
-    return
-  }
   if (
     (e.key === 'f' || e.key === 'F')
     && !e.repeat && !e.ctrlKey && !e.metaKey && !e.altKey
@@ -807,9 +862,6 @@ watch(
 watch(expanded, (v) => {
   // Expanded is meant to hand the graph every pixel, so the header collapses too.
   headerCollapsed.value = v
-  if (typeof document !== 'undefined') {
-    document.body.style.overflow = v ? 'hidden' : ''
-  }
 })
 
 function toggleExtension(ext: string) {
@@ -878,9 +930,20 @@ onUnmounted(() => {
   if (redrawFrame !== null) cancelAnimationFrame(redrawFrame)
   if (expandHintTimer) clearTimeout(expandHintTimer)
   window.removeEventListener('keydown', onKeydown)
-  if (typeof document !== 'undefined') document.body.style.overflow = ''
   stopPlay()
   destroyRenderer()
 })
 </script>
 
+<style scoped>
+/* Without both rules, scrolling inside the dialog or over its backdrop
+   scrolls the page behind it. Progressive enhancement: where unsupported,
+   showModal() still makes the page inert. */
+#repo-diagram-dialog:modal {
+  overscroll-behavior: contain;
+}
+#repo-diagram-dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+</style>

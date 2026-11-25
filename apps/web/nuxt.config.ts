@@ -77,6 +77,13 @@ export default defineNuxtConfig({
   // SSR for SEO, but hydrate for SPA behavior
   ssr: true,
 
+  // Nuxt 4 turns on noUncheckedIndexedAccess. Keep the Nuxt 3 behaviour for
+  // now: enabling it flags 57 array reads, mostly in the diagram renderer, and
+  // is its own piece of work.
+  typescript: {
+    tsConfig: { compilerOptions: { noUncheckedIndexedAccess: false } },
+  },
+
   // The home page shows live rankings, so it cannot be prerendered: the
   // payload would be baked at build time and never refresh. Stale-while-
   // revalidate keeps the static-like response without freezing the data.
